@@ -4,6 +4,7 @@
 #include "freertos/timers.h"
 
 #include "ASHT31.h"
+#include "SMAX1704x_Fuel_Gauge.h"
 
 #define APP_TASK_NAME "APP"
 #define APP_EVENT_QUEUE_SIZE 10
@@ -21,6 +22,7 @@ TimerHandle_t sTimer;
 
 AppTask AppTask::sAppTask;
 sht31::ASHT31 sensor;
+SFE_MAX1704X fuel;
 
 esp_err_t AppTask::StartAppTask()
 {
@@ -28,8 +30,11 @@ esp_err_t AppTask::StartAppTask()
     ESP_LOGI(TAG, "I2C SDA = %i", SHT31_I2C_MASTER_SDA);
 
     if(!sensor.begin()) {
-        ESP_LOGI(TAG, "Failed to begin");
+        ESP_LOGI(TAG, "Failed to begin sht31");
     }
+    if(!fuel.begin()) {
+        ESP_LOGI(TAG, "Failed to begin fuel gauge");
+    } 
     sAppEventQueue = xQueueCreate(APP_EVENT_QUEUE_SIZE, sizeof(AppEvent));
     if (sAppEventQueue == NULL)
     {
@@ -53,6 +58,8 @@ void AppTask::TestEventHandler(AppEvent * aEvent) {
     {
     case AppEvent::kEventType_Temperature:
         ESP_LOGI(TAG, "Temp: %f", aEvent->TempEvent.Temperature);
+        ESP_LOGI(TAG, "Bat: %f", fuel.getVoltage());
+        ESP_LOGI(TAG, "Temp: %f", fuel.getChangeRate());
         break;
     default:
         break;
