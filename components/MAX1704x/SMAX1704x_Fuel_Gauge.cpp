@@ -23,6 +23,8 @@ Distributed as-is; no warranty is given.
 
 static const char* TAG = "MAX1704X-sensor";
 
+using namespace max1704x;
+
 SFE_MAX1704X::SFE_MAX1704X(sfe_max1704x_devices_e device) {
   // Constructor
   setDevice(device);
@@ -102,12 +104,15 @@ bool SFE_MAX1704X::isConnected(void) {
   while ((success == false) && (retries > 0)) {
     uint8_t read_buff[2];
     esp_err_t err = register_read(MAX17043_VERSION, read_buff, 2);
-
+    if(err != ESP_OK) {
+      ESP_LOGE(TAG, "Unable to read version from fuelgauge %s", esp_err_to_name(err));
+    } 
     if (err == ESP_OK)  // Attempt to read the version (2 bytes)
     {
-      uint8_t msb = read_buff[0];
-      uint8_t lsb = read_buff[1];
+      uint8_t lsb = read_buff[0];
+      uint8_t msb = read_buff[1];
       version = ((uint16_t)msb << 8) | lsb;
+      ESP_LOGI(TAG, "version: %i", version);
       success = true;
     } else {
       retries--;

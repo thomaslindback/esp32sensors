@@ -14,7 +14,7 @@ class AppTask
 public:
     esp_err_t StartAppTask();
     static void AppTaskMain(void * pvParameter);
-    static void OnTimerEvent(TimerHandle_t xTimer);
+    static void OnTimerTimeout(TimerHandle_t xTimer);
     void PostEvent(const AppEvent * event);
 
     void UpdateClusterState();
@@ -24,7 +24,7 @@ private:
     esp_err_t Init();
     void DispatchEvent(AppEvent * event);
     static void TestEventHandler(AppEvent * aEvent);
-
+    static esp_err_t sendData(float v, float p);
 
     static AppTask sAppTask;
 };

@@ -120,6 +120,8 @@ typedef enum {
 // So, let's use "5" as a generic error value
 #define MAX17043_GENERIC_ERROR 5
 
+namespace max1704x {
+
 class SFE_MAX1704X
 {
 public:
@@ -383,3 +385,4 @@ private:
 
 };
 
+}
