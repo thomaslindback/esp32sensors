@@ -24,7 +24,7 @@ private:
     esp_err_t Init();
     void DispatchEvent(AppEvent * event);
     static void TestEventHandler(AppEvent * aEvent);
-    static esp_err_t sendData(float v, float p);
+    static esp_err_t sendData(float v, float p, float cr);
 
     static AppTask sAppTask;
 };

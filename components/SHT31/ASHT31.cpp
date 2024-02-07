@@ -194,7 +194,6 @@ bool sht31::ASHT31::readTempHum(void) {
 }
 
 esp_err_t sht31::ASHT31::writeCommand(uint16_t command) {
-  ESP_LOGI(TAG, "Status %i", readStatus());
   uint8_t cmd[2];
 
   cmd[0] = command >> 8;
